@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 const app = express()
 mongoose.connect('mongodb://localhost:27017/saunaTemps')
-
+app.use(express.json());
 
 const dataSchema = new mongoose.Schema({
     temp: String,
@@ -28,5 +28,8 @@ app.get('/all', async (req, res) => {
     res.json(data)
 })
 
-
+app.post('/addTemp', (req, res) => {
+    console.log(req.body)
+    res.send("ok")
+})
 
