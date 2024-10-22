@@ -28,8 +28,27 @@ app.get('/all', async (req, res) => {
     res.json(data)
 })
 
-app.post('/addTemp', (req, res) => {
+app.post('/addTemp', async (req, res) => {
     console.log(req.body)
-    res.send("ok")
+    if (req.body.temp) {
+        const timestamp = new Date().toISOString()
+        console.log(timestamp)
+
+        const newTempEntry = new Model({
+            temp: req.body.temp,
+            timestamp: timestamp
+        })
+
+        try {
+            await newTempEntry.save()
+
+            res.send("ok")
+            return
+        } catch (err) {
+            res.send("Internal server error").statusCode(500)
+            return
+        }
+    }
+    res.send("Invalid request").statusCode(400)
 })
 
