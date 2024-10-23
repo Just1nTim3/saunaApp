@@ -14,8 +14,9 @@ const dataSchema = new mongoose.Schema({
 
 const Model = mongoose.model('temps', dataSchema)
 
+const port = process.env.PORT || 8080
 
-app.listen(8080, () => {
+app.listen(port, () => {
     console.log("Server start")
 })
 
