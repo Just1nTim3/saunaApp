@@ -3,13 +3,14 @@ import mongoose from 'mongoose';
 
 const app = express()
 mongoose.connect('mongodb://localhost:27017/saunaTemps')
+console.log("connected to mongo")
 app.use(express.json());
 
 const dataSchema = new mongoose.Schema({
     temp: String,
     timestamp: String
 },{
-    colletion: "temps"
+    collection: "temps"
 })
 
 const Model = mongoose.model('temps', dataSchema)
@@ -21,10 +22,12 @@ app.listen(port, () => {
 })
 
 app.get('/test', async (req, res) => {
-    res.send("Test")
+    console.log("test")
+    res.send("test")
 })
 
 app.get('/all', async (req, res) => {
+    console.log("Returning all temps")
     const data = await Model.find()
     res.json(data)
 })
@@ -41,8 +44,8 @@ app.post('/addTemp', async (req, res) => {
         })
 
         try {
+            console.log("Adding entry to db")
             await newTempEntry.save()
-
             res.send("ok")
             return
         } catch (err) {
