@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    container_name: mongodb
+    image: "mongodb/mongodb-community-server:6.0-ubi8"
+    volumes:
+      - db-data:/data
+
+  web:
+    container_name: saunaServer
+    build: .
+    ports:
+      #why 8080:8080?
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      MONGODB_URI: "mongodb://mongodb:27017/saunaTemps"
+    depends_on:
+      - db
+
+volumes:
+  db-data: {}

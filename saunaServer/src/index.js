@@ -2,9 +2,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 const app = express()
-mongoose.connect('mongodb://localhost:27017/saunaTemps')
-console.log("connected to mongo")
 app.use(express.json());
+
+const port = process.env.PORT || 8080
+const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/saunaTemps"
+
+mongoose.connect(mongoUri)
+console.log("connected to mongo")
+
 
 const dataSchema = new mongoose.Schema({
     temp: String,
@@ -14,8 +19,6 @@ const dataSchema = new mongoose.Schema({
 })
 
 const Model = mongoose.model('temps', dataSchema)
-
-const port = process.env.PORT || 8080
 
 app.listen(port, () => {
     console.log("Server start")

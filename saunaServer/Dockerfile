@@ -10,6 +10,7 @@ COPY . .
 
 #here you define process.env variable
 ENV PORT=8080
+ENV MONGO_URI="mongodb://mongodb:27017/saunaTemps"
 
 #port on which docker listens
 EXPOSE 8080
