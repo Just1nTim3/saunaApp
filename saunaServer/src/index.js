@@ -24,18 +24,18 @@ app.listen(port, () => {
     console.log("Server start")
 })
 
-app.get('/test', async (req, res) => {
+app.get('/saunaApp/test', async (req, res) => {
     console.log("test")
     res.send("test")
 })
 
-app.get('/all', async (req, res) => {
+app.get('/saunaApp/allTemps', async (req, res) => {
     console.log("Returning all temps")
     const data = await Model.find()
     res.json(data)
 })
 
-app.post('/addTemp', async (req, res) => {
+app.post('/saunaApp/addTemp', async (req, res) => {
     console.log(req.body)
     if (req.body.temp) {
         if (req.body.temp === "-127.00") {
