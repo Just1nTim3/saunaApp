@@ -2,28 +2,35 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 const app = express()
-mongoose.connect('mongodb://localhost:27017/saunaTemps')
 app.use(express.json());
+
+const port = process.env.PORT || 8080
+const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/saunaTemps"
+
+mongoose.connect(mongoUri)
+console.log("connected to mongo")
+
 
 const dataSchema = new mongoose.Schema({
     temp: String,
     timestamp: String
 },{
-    colletion: "temps"
+    collection: "temps"
 })
 
 const Model = mongoose.model('temps', dataSchema)
 
-
-app.listen(8080, () => {
+app.listen(port, () => {
     console.log("Server start")
 })
 
 app.get('/test', async (req, res) => {
-    res.send("Test")
+    console.log("test")
+    res.send("test")
 })
 
 app.get('/all', async (req, res) => {
+    console.log("Returning all temps")
     const data = await Model.find()
     res.json(data)
 })
@@ -31,6 +38,11 @@ app.get('/all', async (req, res) => {
 app.post('/addTemp', async (req, res) => {
     console.log(req.body)
     if (req.body.temp) {
+        if (req.body.temp === "-127.00") {
+            console.log("Invalid read from sensor")
+            res.send("Invalid temp entry").status(400)
+            return
+        }
         const timestamp = new Date().toISOString()
         console.log(timestamp)
 
@@ -40,15 +52,15 @@ app.post('/addTemp', async (req, res) => {
         })
 
         try {
+            console.log("Adding entry to db")
             await newTempEntry.save()
-
             res.send("ok")
             return
         } catch (err) {
-            res.send("Internal server error").statusCode(500)
+            res.send("Internal server error").status(500)
             return
         }
     }
-    res.send("Invalid request").statusCode(400)
+    res.send("Invalid request").status(400)
 })
 
