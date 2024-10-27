@@ -38,6 +38,11 @@ app.get('/all', async (req, res) => {
 app.post('/addTemp', async (req, res) => {
     console.log(req.body)
     if (req.body.temp) {
+        if (req.body.temp === "-127.00") {
+            console.log("Invalid read from sensor")
+            res.send("Invalid temp entry").status(400)
+            return
+        }
         const timestamp = new Date().toISOString()
         console.log(timestamp)
 
@@ -52,10 +57,10 @@ app.post('/addTemp', async (req, res) => {
             res.send("ok")
             return
         } catch (err) {
-            res.send("Internal server error").statusCode(500)
+            res.send("Internal server error").status(500)
             return
         }
     }
-    res.send("Invalid request").statusCode(400)
+    res.send("Invalid request").status(400)
 })
 
