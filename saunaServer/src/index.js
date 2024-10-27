@@ -10,10 +10,12 @@ const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/saunaTemps"
 mongoose.connect(mongoUri)
 console.log("connected to mongo")
 
+const fiveHoursMilis = 5 * 60 * 60 * 1000
+
 
 const dataSchema = new mongoose.Schema({
     temp: String,
-    timestamp: String
+    timestamp: Date
 },{
     collection: "temps"
 })
@@ -43,7 +45,7 @@ app.post('/saunaApp/addTemp', async (req, res) => {
             res.send("Invalid temp entry").status(400)
             return
         }
-        const timestamp = new Date().toISOString()
+        const timestamp = Date.now()
         console.log(timestamp)
 
         const newTempEntry = new Model({
@@ -62,5 +64,16 @@ app.post('/saunaApp/addTemp', async (req, res) => {
         }
     }
     res.send("Invalid request").status(400)
+})
+
+app.get("/saunaApp/latestTemps", async (req, res) => {
+    console.log("Returning latest temps")
+    const timeSpan = new Date(Date.now() - fiveHoursMilis)
+    console.log(timeSpan)
+    const data = await Model.find({
+        timestamp: {$gte: timeSpan}
+    }, 'temp timestamp')
+    console.log(data)
+    res.json(data)
 })
 
