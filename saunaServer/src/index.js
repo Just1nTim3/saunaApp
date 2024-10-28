@@ -17,7 +17,7 @@ const fiveHoursMillis = 5 * 60 * 60 * 1000
 
 
 const dataSchema = new mongoose.Schema({
-    temp: String,
+    temp: Number,
     timestamp: Date
 },{
     collection: "temps"
@@ -42,8 +42,9 @@ app.get('/saunaApp/allTemps', async (req, res) => {
 
 app.post('/saunaApp/addTemp', async (req, res) => {
     console.log(req.body)
-    if (req.body.temp) {
-        if (req.body.temp === "-127.00") {
+    const temp = Number(req.body.temp)
+    if (temp) {
+        if (temp === -127.00) {
             console.log("Invalid read from sensor")
             res.send("Invalid temp entry").status(400)
             return
@@ -52,7 +53,7 @@ app.post('/saunaApp/addTemp', async (req, res) => {
         console.log(new Date(timestamp))
 
         const newTempEntry = new Model({
-            temp: req.body.temp,
+            temp: temp,
             timestamp: timestamp
         })
 
