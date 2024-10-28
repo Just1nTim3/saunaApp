@@ -7,10 +7,11 @@ app.use(express.json());
 const port = process.env.PORT || 8080
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/saunaTemps"
 
-mongoose.connect(mongoUri)
+console.log("connecting to mongo with URI " + mongoUri)
+await mongoose.connect(mongoUri)
 console.log("connected to mongo")
 
-const fiveHoursMilis = 5 * 60 * 60 * 1000
+const fiveHoursMillis = 5 * 60 * 60 * 1000
 
 
 const dataSchema = new mongoose.Schema({
@@ -23,7 +24,7 @@ const dataSchema = new mongoose.Schema({
 const Model = mongoose.model('temps', dataSchema)
 
 app.listen(port, () => {
-    console.log("Server start")
+    console.log("Server is listening on port " + port)
 })
 
 app.get('/saunaApp/test', async (req, res) => {
@@ -46,7 +47,7 @@ app.post('/saunaApp/addTemp', async (req, res) => {
             return
         }
         const timestamp = Date.now()
-        console.log(timestamp)
+        console.log(new Date(timestamp))
 
         const newTempEntry = new Model({
             temp: req.body.temp,
@@ -68,7 +69,7 @@ app.post('/saunaApp/addTemp', async (req, res) => {
 
 app.get("/saunaApp/latestTemps", async (req, res) => {
     console.log("Returning latest temps")
-    const timeSpan = new Date(Date.now() - fiveHoursMilis)
+    const timeSpan = new Date(Date.now() - fiveHoursMillis)
     console.log(timeSpan)
     const data = await Model.find({
         timestamp: {$gte: timeSpan}
