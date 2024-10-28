@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react';
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+type Temp = {
+    _id: number
+    temp: string
+    timestamp: Date
+}
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+function App() {
+    const [temps, setTemps] = useState<Temp[]>([])
+
+    useEffect(() => {
+        const fetchTemps = async () => {
+            try {
+                console.log("Calling latest Temps endpoint")
+                const response = await fetch("http://localhost:8080/saunaApp/latestTemps")
+                console.log(response.status)
+                const temps: Temp[] = await response.json()
+                console.log("Temps: " + JSON.stringify(temps))
+                setTemps(temps)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        fetchTemps()
+    }, []);
+
+    return (
+        <div className="App">
+            <h1>Hello from sauna!</h1>
+            <h1>Temp: {temps[temps.length - 1]?.temp}</h1>
+        </div>
+    )
 }
 
 export default App
