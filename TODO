@@ -13,8 +13,10 @@ Arduino
 
 
 Frontend
-    add frontend app
+    //add frontend app
 
     docker compose front
 
-    vite?
+    //vite?
+
+    adjust to phone screen sizes

@@ -31,14 +31,14 @@ function App() {
     return (
         <div className="App">
             <h1>Hello from sauna!</h1>
-            <h1>Temp: {temps[temps.length - 1]?.temp}</h1>
+            <h1>Temp: {temps[temps.length - 1]?.temp} °C</h1>
             <h2>Temp chart:</h2>
             <div>
                 <LineChart
-                    xAxis={[{ data: temps.map((_, index) => index + 1) }]}
+                    xAxis={[{ data: temps?.map((_, index) => index + 1) }]}
                     series={[
                         {
-                            data: temps.map(t => t.temp),
+                            data: temps?.map(t => t.temp),
                         },
                     ]}
                     width={1000}
