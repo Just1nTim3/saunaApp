@@ -18,7 +18,8 @@
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
-String servicePath = "http://192.168.0.115:8080/test";
+// String servicePath = "http://192.168.0.115:8080/test";
+String servicePath = "http://192.168.0.115:8080/addTemp";
 
 void setup() {
   Serial.begin(9600);
@@ -44,8 +45,12 @@ void loop() {
     WiFiClient client;
     HTTPClient http;
 
+    String tempData = "{\"temp\":\"" + String(sensors.getTempCByIndex(0)) + "\"}";
+
     http.begin(client, servicePath);
-    int responseCode = http.GET();
+    http.addHeader("Content-Type", "application/json");
+    //int responseCode = http.GET();
+    int responseCode = http.POST(tempData);
     if (responseCode>0) {
       Serial.print("HTTP Response code: ");
       Serial.println(responseCode);
@@ -63,5 +68,6 @@ void loop() {
     Serial.println("WiFi Disconnected");
   }
 
-  delay(2000);
+//TODO: get rid of delay and switch to milis loop
+  delay(10000);
 }
