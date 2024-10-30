@@ -1,9 +1,22 @@
-Docker for server
-Docker for mongo
 
-due to firewall server can't run on laptop - host it?
-add API key to authenticate calls
+Server
+    //Docker for server
+    //Docker for mongo
 
-add POST in microcontroller
+    due to firewall server can't run on laptop - host it?
+        docker on raspberry
+    add API key to authenticate calls
 
-add frontend app
+
+Arduino
+    //add POST in microcontroller
+
+
+Frontend
+    //add frontend app
+
+    docker compose front
+
+    //vite?
+
+    adjust to phone screen sizes
