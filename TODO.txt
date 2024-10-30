@@ -1,3 +1,4 @@
+import { validateHeaderValue } from "http"
 
 Server
     //Docker for server
@@ -20,3 +21,5 @@ Frontend
     //vite?
 
     adjust to phone screen sizes
+    change color of temp depending on the value
+        blue yellow red

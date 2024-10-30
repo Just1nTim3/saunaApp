@@ -22,8 +22,7 @@ app.get('/saunaApp/test', async (req, res) => {
 })
 
 app.get('/saunaApp/allTemps', async (req, res) => {
-    const data = await mongoService.getAllTemps()
-    res.json(data)
+    res.json(await mongoService.getAllTemps())
 })
 
 app.post('/saunaApp/addTemp', async (req, res) => {
@@ -48,7 +47,6 @@ app.post('/saunaApp/addTemp', async (req, res) => {
 })
 
 app.get("/saunaApp/latestTemps", async (req, res) => {
-    const data = await mongoService.getLatestTemps()
-    res.json(data)
+    res.json(await mongoService.getLatestTemps())
 })
 
