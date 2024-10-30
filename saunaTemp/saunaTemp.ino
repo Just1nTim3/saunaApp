@@ -19,7 +19,10 @@
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 // String servicePath = "http://192.168.0.115:8080/test";
-String servicePath = "http://192.168.0.115:8080/addTemp";
+String servicePath = "http://192.168.0.115:8080/saunaApp/addTemp";
+String tempData = "";
+String payload = "";
+int responseCode = 200;
 
 void setup() {
   Serial.begin(9600);
@@ -45,16 +48,16 @@ void loop() {
     WiFiClient client;
     HTTPClient http;
 
-    String tempData = "{\"temp\":\"" + String(sensors.getTempCByIndex(0)) + "\"}";
+    tempData = "{\"temp\":\"" + String(sensors.getTempCByIndex(0)) + "\"}";
 
     http.begin(client, servicePath);
     http.addHeader("Content-Type", "application/json");
     //int responseCode = http.GET();
-    int responseCode = http.POST(tempData);
-    if (responseCode>0) {
+    responseCode = http.POST(tempData);
+    if (responseCode > 0) {
       Serial.print("HTTP Response code: ");
       Serial.println(responseCode);
-      String payload = http.getString();
+      payload = http.getString();
       Serial.println(payload);
     }
     else {
@@ -69,5 +72,5 @@ void loop() {
   }
 
 //TODO: get rid of delay and switch to milis loop
-  delay(10000);
+  delay(20000);
 }
